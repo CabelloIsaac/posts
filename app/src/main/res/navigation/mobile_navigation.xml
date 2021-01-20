@@ -7,14 +7,14 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.postsisaac.ui.home.HomeFragment"
+        android:name="com.example.postsisaac.ui.posts.PostsFragment"
         android:label="@string/title_all"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_posts" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.postsisaac.ui.dashboard.DashboardFragment"
+        android:name="com.example.postsisaac.ui.favorites.FavoritesFragment"
         android:label="@string/title_favorites"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_favorites" />
 
 </navigation>
