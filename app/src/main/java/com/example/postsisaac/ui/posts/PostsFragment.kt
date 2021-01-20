@@ -12,15 +12,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.postsisaac.R
+import com.example.postsisaac.models.Post
+import org.json.JSONObject
 
 class PostsFragment : Fragment() {
 
     private lateinit var postViewModel: PostsViewModel
     private lateinit var btGet: Button
     private lateinit var textView: TextView
+    private var posts: ArrayList<Post> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,37 +41,52 @@ class PostsFragment : Fragment() {
             textView.text = it
         })
 
-
         btGet.setOnClickListener {
-            getData()
+            getPosts()
         }
-
-
-
-
 
         return root
     }
 
-    fun getData() {
+    private fun getPosts() {
+
+        posts.clear()
+
         // Instantiate the RequestQueue.
         val queue = Volley.newRequestQueue(context)
-        val url = "https://www.google.com"
+        val url = "https://jsonplaceholder.typicode.com/posts"
 
         // Request a string response from the provided URL.
-        val stringRequest = StringRequest(
-            Request.Method.GET, url,
-            Response.Listener<String> { response ->
-                // Display the first 500 characters of the response string.
-                textView.text = "Response is: ${response.substring(0, 500)}"
+        val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, url, null,
+            { response ->
+
+                for (i in 0 until response.length()) {
+                    val post = createPostObjectFrom(response.getJSONObject(i))
+                    addPostToList(post)
+                }
+
+                textView.text = posts.size.toString()
             },
-            Response.ErrorListener {
-                Log.e("Error", it.toString())
-                textView.text = "That didn't work!" +it.toString()
-            })
+            { error ->
+                textView.text = error.toString()
+            }
+        )
 
         // Add the request to the RequestQueue.
-        queue.add(stringRequest)
+        queue.add(jsonArrayRequest)
+    }
+
+    private fun createPostObjectFrom(json: JSONObject): Post {
+        return Post(
+            json.getInt("userId"),
+            json.getInt("id"),
+            json.getString("title"),
+            json.getString("body")
+        )
+    }
+
+    private fun addPostToList(post: Post) {
+        posts.add(post)
     }
 
 }
