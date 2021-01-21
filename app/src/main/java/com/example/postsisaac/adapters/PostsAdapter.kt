@@ -3,6 +3,7 @@ package com.example.postsisaac.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -20,6 +21,7 @@ class PostsAdapter(private val dataSet: ArrayList<Post>, private val onClick: (P
         RecyclerView.ViewHolder(itemView) {
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         val tvBody: TextView = itemView.findViewById(R.id.tvBody)
+        val ivReaded: ImageView = itemView.findViewById(R.id.ivReaded)
         private var currentPost: Post? = null
 
         init {
@@ -27,6 +29,7 @@ class PostsAdapter(private val dataSet: ArrayList<Post>, private val onClick: (P
             val cardView: CardView = itemView.findViewById(R.id.cardView)
 
             cardView.setOnClickListener {
+                currentPost?.readed = true
                 currentPost?.let {
                     onClick(it)
                 }
@@ -59,6 +62,11 @@ class PostsAdapter(private val dataSet: ArrayList<Post>, private val onClick: (P
         // contents of the view with that element
         viewHolder.tvTitle.text = post.title
         viewHolder.tvBody.text = post.body
+
+        if (post.readed)
+            viewHolder.ivReaded.visibility = View.GONE
+        else
+            viewHolder.ivReaded.visibility = View.VISIBLE
 
         viewHolder.bind(post)
 

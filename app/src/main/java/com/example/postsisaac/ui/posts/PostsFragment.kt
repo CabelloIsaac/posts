@@ -40,7 +40,7 @@ class PostsFragment : Fragment() {
         postViewModel =
             ViewModelProvider(this).get(PostsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_posts, container, false)
-        postsAdapter = PostsAdapter(posts) { flower -> adapterOnClick(flower) }
+        postsAdapter = PostsAdapter(posts) { post -> adapterOnClick(post) }
 
         val recyclerView: RecyclerView = root.findViewById(R.id.recycler_view)
         recyclerView.adapter = postsAdapter
@@ -63,7 +63,8 @@ class PostsFragment : Fragment() {
             { response ->
 
                 for (i in 0 until response.length()) {
-                    val post = createPostObjectFrom(response.getJSONObject(i))
+                    val belongsToFirst20 = i < 20
+                    val post = createPostObjectFrom(response.getJSONObject(i), !belongsToFirst20)
                     addPostToList(post)
                 }
 
@@ -84,15 +85,17 @@ class PostsFragment : Fragment() {
         val intent = Intent(context, PostDetailsActivity()::class.java)
         intent.putExtra("id", post.id)
         startActivity(intent)
+        postsAdapter.notifyDataSetChanged()
     }
 
 
-    private fun createPostObjectFrom(json: JSONObject): Post {
+    private fun createPostObjectFrom(json: JSONObject, readed: Boolean): Post {
         return Post(
             json.getInt("userId"),
             json.getInt("id"),
             json.getString("title"),
-            json.getString("body")
+            json.getString("body"),
+            readed
         )
     }
 

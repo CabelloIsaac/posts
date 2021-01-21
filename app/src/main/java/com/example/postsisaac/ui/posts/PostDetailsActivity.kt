@@ -74,7 +74,7 @@ class PostDetailsActivity : AppCompatActivity() {
             Request.Method.GET, url, null,
             { response ->
 
-                val post = Post(response)
+                val post = Post(response, true)
                 showPostDataOnUIElements(post)
 
                 userId = post.userId
