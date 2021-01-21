@@ -45,6 +45,8 @@ class PostsAdapter(
                 }
             }
 
+            cardView.setOnDragListener { v, event -> true }
+
             ivFavorite.setOnClickListener {
                 currentPost?.readed = true
                 currentPost?.let {

@@ -6,8 +6,9 @@ import org.json.JSONObject
 
 @Entity
 data class Post(
+    @PrimaryKey
+    var id: Int,
     var userId: Int,
-    @PrimaryKey var id: Int,
     var title: String,
     var body: String,
     var isFavorite: Int,
@@ -15,8 +16,8 @@ data class Post(
 ) {
 
     constructor (json: JSONObject, isFavorite: Int, readed: Boolean) : this(
-        json.getInt("userId"),
         json.getInt("id"),
+        json.getInt("userId"),
         json.getString("title"),
         json.getString("body"),
         isFavorite,

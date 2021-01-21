@@ -177,7 +177,7 @@ class PostDetailsActivity : AppCompatActivity() {
             menuFavorite!!.setIcon(R.drawable.ic_baseline_favorite_24)
 //            Log.d(TAG, "onCreateOptionsMenu: favoriteItemIcon is checked")
         } else {
-            menuFavorite!!.setIcon(R.drawable.ic_baseline_business_24)
+            menuFavorite!!.setIcon(R.drawable.ic_baseline_favorite_border_24)
         }
     }
 
