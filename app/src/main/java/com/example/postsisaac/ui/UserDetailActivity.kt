@@ -8,20 +8,24 @@ import com.android.volley.Request
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.postsisaac.R
+import com.example.postsisaac.databinding.ActivityUserDetailBinding
 import com.example.postsisaac.models.User
 import com.example.postsisaac.utils.Constants
 import com.google.android.material.appbar.CollapsingToolbarLayout
-import kotlinx.android.synthetic.main.activity_user_detail.*
-import kotlinx.android.synthetic.main.content_scrolling.*
 
 class UserDetailActivity : AppCompatActivity() {
 
     private var id: Int? = null
     private lateinit var toolbarLayout: CollapsingToolbarLayout
+    private lateinit var binding: ActivityUserDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_detail)
+
+        binding = ActivityUserDetailBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         setSupportActionBar(findViewById(R.id.toolbar))
         toolbarLayout = findViewById(R.id.toolbar_layout)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -67,13 +71,14 @@ class UserDetailActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun showUserDataOnUIElements(user: User) {
         toolbarLayout.title = "${user.name} (${user.username})"
-        tvEmail.text = user.email
-        tvPhone.text = user.phone
-        tvWebsite.text = user.website
-        tvAddress.text =
+
+        binding.content.tvEmail.text = user.email
+        binding.content.tvPhone.text = user.phone
+        binding.content.tvWebsite.text = user.website
+        binding.content.tvAddress.text =
             "${user.address.street}, ${user.address.suite}, ${user.address.city}, ${user.address.zipcode}"
-        tvCompanyName.text = user.company.name
-        tvCompanyCatchPhrase.text = user.company.catchPhrase
+        binding.content.tvCompanyName.text = user.company.name
+        binding.content.tvCompanyCatchPhrase.text = user.company.catchPhrase
     }
 
 }

@@ -1,10 +1,13 @@
 package com.example.postsisaac.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import org.json.JSONObject
 
+@Entity
 data class Post(
     var userId: Int,
-    var id: Int,
+    @PrimaryKey var id: Int,
     var title: String,
     var body: String,
     var readed: Boolean
