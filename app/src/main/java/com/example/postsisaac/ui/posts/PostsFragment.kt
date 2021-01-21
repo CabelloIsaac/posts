@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonArrayRequest
@@ -17,15 +18,18 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.postsisaac.R
+import com.example.postsisaac.adapters.PostsAdapter
 import com.example.postsisaac.models.Post
 import org.json.JSONObject
 
 class PostsFragment : Fragment() {
 
     private lateinit var postViewModel: PostsViewModel
-    private lateinit var btGet: Button
-    private lateinit var textView: TextView
+
+    //    private lateinit var btGet: Button
+//    private lateinit var textView: TextView
     private var posts: ArrayList<Post> = ArrayList()
+    private lateinit var postsAdapter: PostsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,15 +39,22 @@ class PostsFragment : Fragment() {
         postViewModel =
             ViewModelProvider(this).get(PostsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_posts, container, false)
-        textView = root.findViewById(R.id.text_home)
-        btGet = root.findViewById(R.id.btGet)
-        postViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
-        })
+        postsAdapter = PostsAdapter(posts)
 
-        btGet.setOnClickListener {
-            getPosts()
-        }
+        val recyclerView: RecyclerView = root.findViewById(R.id.recycler_view)
+        recyclerView.adapter = postsAdapter
+
+//        textView = root.findViewById(R.id.text_home)
+//        btGet = root.findViewById(R.id.btGet)
+//        postViewModel.text.observe(viewLifecycleOwner, Observer {
+//            textView.text = it
+//        })
+
+//        btGet.setOnClickListener {
+//            getPosts()
+//        }
+
+        getPosts()
 
         return root
     }
@@ -65,10 +76,11 @@ class PostsFragment : Fragment() {
                     addPostToList(post)
                 }
 
-                textView.text = posts.size.toString()
+                postsAdapter.notifyDataSetChanged()
+
             },
             { error ->
-                textView.text = error.toString()
+                Log.e("Error", error.toString())
             }
         )
 
