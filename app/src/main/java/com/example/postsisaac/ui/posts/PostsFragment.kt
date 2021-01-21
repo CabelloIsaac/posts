@@ -17,28 +17,16 @@ import com.android.volley.toolbox.Volley
 import com.example.postsisaac.R
 import com.example.postsisaac.adapters.PostsAdapter
 import com.example.postsisaac.models.Post
+import com.example.postsisaac.utils.Constants
 import com.example.postsisaac.utils.PostsDb
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 
 class PostsFragment : Fragment() {
 
-    //    private lateinit var app: PostsApp
     private lateinit var postViewModel: PostsViewModel
     private var posts: ArrayList<Post> = ArrayList()
     private lateinit var postsAdapter: PostsAdapter
     private lateinit var db: PostsDb
-
-//    override fun onActivityCreated(savedInstanceState: Bundle?) {
-//        super.onActivityCreated(savedInstanceState)
-//
-//        if (activity != null) {
-//            db = Room.databaseBuilder(
-//                activity?.applicationContext!!,
-//                PostsDb::class.java, "posts"
-//            ).build()
-//        }
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -115,9 +103,16 @@ class PostsFragment : Fragment() {
     /* Opens FlowerDetailActivity when RecyclerView item is clicked. */
     private fun adapterOnClick(post: Post) {
         val intent = Intent(context, PostDetailsActivity()::class.java)
-        intent.putExtra("id", post.id)
+        intent.putExtra(Constants.ID, post.id)
         startActivity(intent)
         postsAdapter.notifyDataSetChanged()
+        updatePostStatus(post)
+    }
+
+    private fun updatePostStatus(post: Post) {
+        lifecycleScope.launch {
+            db.postDao().update(post)
+        }
     }
 
     private fun addPostsToDb(remotePosts: ArrayList<Post>) {

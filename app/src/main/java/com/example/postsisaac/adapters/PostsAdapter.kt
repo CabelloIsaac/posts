@@ -29,6 +29,9 @@ class PostsAdapter(private val dataSet: ArrayList<Post>, private val onClick: (P
             val cardView: CardView = itemView.findViewById(R.id.cardView)
 
             cardView.setOnClickListener {
+
+
+
                 currentPost?.readed = true
                 currentPost?.let {
                     onClick(it)
