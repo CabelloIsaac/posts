@@ -18,14 +18,12 @@ class PostsAdapter(private val dataSet: ArrayList<Post>, private val onClick: (P
      */
     class ViewHolder(itemView: View, val onClick: (Post) -> Unit) :
         RecyclerView.ViewHolder(itemView) {
-        val tvTitle: TextView
-        val tvBody: TextView
+        val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
+        val tvBody: TextView = itemView.findViewById(R.id.tvBody)
         private var currentPost: Post? = null
 
         init {
             // Define click listener for the ViewHolder's View.
-            tvTitle = itemView.findViewById(R.id.tvTitle)
-            tvBody = itemView.findViewById(R.id.tvBody)
             val cardView: CardView = itemView.findViewById(R.id.cardView)
 
             cardView.setOnClickListener {
