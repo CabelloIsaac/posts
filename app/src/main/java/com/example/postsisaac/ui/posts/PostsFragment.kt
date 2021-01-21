@@ -37,21 +37,35 @@ class PostsFragment : Fragment() {
         postViewModel =
             ViewModelProvider(this).get(PostsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_posts, container, false)
-        postsAdapter = PostsAdapter(posts) { post -> adapterOnClick(post) }
+        postsAdapter =
+            PostsAdapter(
+                posts,
+                { post -> adapterOnClick(post) },
+                { post -> adapterOnFavoriteClick(post) })
 
         val recyclerView: RecyclerView = root.findViewById(R.id.recycler_view)
         recyclerView.adapter = postsAdapter
 
+        initDB()
+
+        loadPostsFromDb()
+
+        return root
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        loadPostsFromDb()
+    }
+
+
+    private fun initDB() {
         if (activity != null) {
             db = Room.databaseBuilder(
                 activity?.applicationContext!!,
                 PostsDb::class.java, "posts"
             ).build()
         }
-
-        loadPostsFromDb()
-
-        return root
     }
 
     private fun loadPostsFromDb() {
@@ -83,9 +97,10 @@ class PostsFragment : Fragment() {
 
                 for (i in 0 until response.length()) {
                     val belongsToFirst20 = i < 20
-                    val post = Post(response.getJSONObject(i), !belongsToFirst20)
+                    val post = Post(response.getJSONObject(i), 0, !belongsToFirst20)
                     remotePosts.add(post)
                     addPostsToDb(remotePosts)
+                    postsAdapter.notifyDataSetChanged()
                 }
 
                 Log.d("PostsFragment", "There is ${remotePosts.size} posts in Server")
@@ -109,9 +124,22 @@ class PostsFragment : Fragment() {
         updatePostStatus(post)
     }
 
+    /* Opens FlowerDetailActivity when RecyclerView item is clicked. */
+    private fun adapterOnFavoriteClick(post: Post) {
+        if (post.isFavorite == 1)
+            post.isFavorite = 0
+        else
+            post.isFavorite = 1
+
+        println("eqweqweqwe")
+
+        updatePostStatus(post)
+    }
+
     private fun updatePostStatus(post: Post) {
         lifecycleScope.launch {
             db.postDao().update(post)
+            loadPostsFromDb()
         }
     }
 

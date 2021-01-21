@@ -10,14 +10,16 @@ data class Post(
     @PrimaryKey var id: Int,
     var title: String,
     var body: String,
+    var isFavorite: Int,
     var readed: Boolean
 ) {
 
-    constructor (json: JSONObject, readed: Boolean) : this(
+    constructor (json: JSONObject, isFavorite: Int, readed: Boolean) : this(
         json.getInt("userId"),
         json.getInt("id"),
         json.getString("title"),
         json.getString("body"),
+        isFavorite,
         readed
     )
 

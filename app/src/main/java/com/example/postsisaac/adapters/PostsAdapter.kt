@@ -10,31 +10,45 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.postsisaac.R
 import com.example.postsisaac.models.Post
 
-class PostsAdapter(private val dataSet: ArrayList<Post>, private val onClick: (Post) -> Unit) :
+class PostsAdapter(
+    private val dataSet: ArrayList<Post>,
+    private val onClick: (Post) -> Unit,
+    private val onFavoriteClick: (Post) -> Unit
+) :
     RecyclerView.Adapter<PostsAdapter.ViewHolder>() {
 
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
      */
-    class ViewHolder(itemView: View, val onClick: (Post) -> Unit) :
+    class ViewHolder(
+        itemView: View,
+        val onClick: (Post) -> Unit,
+        val onFavoriteClick: (Post) -> Unit
+    ) :
         RecyclerView.ViewHolder(itemView) {
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         val tvBody: TextView = itemView.findViewById(R.id.tvBody)
         val ivReaded: ImageView = itemView.findViewById(R.id.ivReaded)
+        val ivFavorite: ImageView = itemView.findViewById(R.id.ivFavorite)
+        val cardView: CardView = itemView.findViewById(R.id.cardView)
+
         private var currentPost: Post? = null
 
         init {
             // Define click listener for the ViewHolder's View.
-            val cardView: CardView = itemView.findViewById(R.id.cardView)
 
             cardView.setOnClickListener {
-
-
-
                 currentPost?.readed = true
                 currentPost?.let {
                     onClick(it)
+                }
+            }
+
+            ivFavorite.setOnClickListener {
+                currentPost?.readed = true
+                currentPost?.let {
+                    onFavoriteClick(it)
                 }
             }
 
@@ -52,8 +66,7 @@ class PostsAdapter(private val dataSet: ArrayList<Post>, private val onClick: (P
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.post_item, viewGroup, false)
-
-        return ViewHolder(view, onClick)
+        return ViewHolder(view, onClick, onFavoriteClick)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
@@ -65,11 +78,16 @@ class PostsAdapter(private val dataSet: ArrayList<Post>, private val onClick: (P
         // contents of the view with that element
         viewHolder.tvTitle.text = post.title
         viewHolder.tvBody.text = post.body
-
         if (post.readed)
             viewHolder.ivReaded.visibility = View.GONE
         else
             viewHolder.ivReaded.visibility = View.VISIBLE
+
+        if (post.isFavorite == 1)
+            viewHolder.ivFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+        else
+            viewHolder.ivFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+
 
         viewHolder.bind(post)
 
