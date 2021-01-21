@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.postsisaac.R
 import com.example.postsisaac.models.Post
@@ -25,8 +26,9 @@ class PostsAdapter(private val dataSet: ArrayList<Post>, private val onClick: (P
             // Define click listener for the ViewHolder's View.
             tvTitle = itemView.findViewById(R.id.tvTitle)
             tvBody = itemView.findViewById(R.id.tvBody)
+            val cardView: CardView = itemView.findViewById(R.id.cardView)
 
-            itemView.setOnClickListener {
+            cardView.setOnClickListener {
                 currentPost?.let {
                     onClick(it)
                 }

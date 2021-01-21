@@ -45,16 +45,6 @@ class PostsFragment : Fragment() {
         val recyclerView: RecyclerView = root.findViewById(R.id.recycler_view)
         recyclerView.adapter = postsAdapter
 
-//        textView = root.findViewById(R.id.text_home)
-//        btGet = root.findViewById(R.id.btGet)
-//        postViewModel.text.observe(viewLifecycleOwner, Observer {
-//            textView.text = it
-//        })
-
-//        btGet.setOnClickListener {
-//            getPosts()
-//        }
-
         getPosts()
 
         return root
