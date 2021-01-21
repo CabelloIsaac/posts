@@ -1,5 +1,6 @@
 package com.example.postsisaac.ui.posts
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -39,7 +40,7 @@ class PostsFragment : Fragment() {
         postViewModel =
             ViewModelProvider(this).get(PostsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_posts, container, false)
-        postsAdapter = PostsAdapter(posts)
+        postsAdapter = PostsAdapter(posts) { flower -> adapterOnClick(flower) }
 
         val recyclerView: RecyclerView = root.findViewById(R.id.recycler_view)
         recyclerView.adapter = postsAdapter
@@ -87,6 +88,14 @@ class PostsFragment : Fragment() {
         // Add the request to the RequestQueue.
         queue.add(jsonArrayRequest)
     }
+
+    /* Opens FlowerDetailActivity when RecyclerView item is clicked. */
+    private fun adapterOnClick(post: Post) {
+        val intent = Intent(context, PostDetailsActivity()::class.java)
+        intent.putExtra("id", post.id)
+        startActivity(intent)
+    }
+
 
     private fun createPostObjectFrom(json: JSONObject): Post {
         return Post(
