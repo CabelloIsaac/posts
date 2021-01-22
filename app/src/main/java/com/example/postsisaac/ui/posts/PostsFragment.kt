@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -23,10 +22,8 @@ import com.example.postsisaac.utils.PostsDb
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
-
 class PostsFragment : Fragment() {
 
-    private lateinit var postViewModel: PostsViewModel
     private var posts: ArrayList<Post> = ArrayList()
     private lateinit var postsAdapter: PostsAdapter
     private lateinit var db: PostsDb
@@ -39,8 +36,6 @@ class PostsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        postViewModel =
-            ViewModelProvider(this).get(PostsViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_posts, container, false)
         postsAdapter =
             PostsAdapter(

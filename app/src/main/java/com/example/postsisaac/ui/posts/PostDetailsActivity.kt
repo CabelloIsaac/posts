@@ -24,14 +24,12 @@ import kotlinx.coroutines.launch
 
 class PostDetailsActivity : AppCompatActivity() {
 
-    private var menu: Menu? = null
-    private var menuFavorite: MenuItem? = null
-
     private lateinit var db: PostsDb
     private lateinit var tvTitle: TextView
     private lateinit var tvBody: TextView
     private lateinit var tvUserName: TextView
     private lateinit var cardViewUser: CardView
+    private var menuFavorite: MenuItem? = null
 
     private var id: Int? = null
     private var userId: Int? = null
@@ -42,15 +40,15 @@ class PostDetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_post_details)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        title = "Details"
+        title = getString(R.string.post_details)
 
-        /* Connect variables to UI elements. */
         tvTitle = findViewById(R.id.tvTItle)
         tvBody = findViewById(R.id.tvBody)
         tvUserName = findViewById(R.id.tvUserName)
         cardViewUser = findViewById(R.id.cardViewUser)
 
         initDB()
+
         getIntentExtras()
 
         getPostData()
@@ -67,22 +65,16 @@ class PostDetailsActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 
-    override fun onBackPressed() {
-        setResult(0)
-        super.onBackPressed()
-    }
-
     private fun initDB() {
         db = Room.databaseBuilder(
-            applicationContext!!,
-            PostsDb::class.java, "posts"
+            applicationContext!!, PostsDb::class.java, Constants.POSTS
         ).build()
     }
 
     private fun getIntentExtras() {
         val bundle: Bundle? = intent.extras
         if (bundle != null) {
-            id = bundle.getInt("id")
+            id = bundle.getInt(Constants.ID)
             if (id == null) finish()
         } else {
             finish()
@@ -97,16 +89,10 @@ class PostDetailsActivity : AppCompatActivity() {
 
     private fun getPostData() {
         lifecycleScope.launch {
-
-            Log.d("PostDetailActivity", "Loading Post Data")
-
             post = db.postDao().getById(id!!)
             showPostDataOnUIElements()
-            Log.d("PostDetailActivity", "${post!!.isFavorite}")
-
             userId = post!!.userId
             getUserData(post!!.userId)
-
         }
     }
 
@@ -114,7 +100,6 @@ class PostDetailsActivity : AppCompatActivity() {
         val queue = Volley.newRequestQueue(this)
         val url = "https://jsonplaceholder.typicode.com/users/${userId}"
 
-        // Request a string response from the provided URL.
         val jsonArrayRequest = JsonObjectRequest(
             Request.Method.GET, url, null,
             { response ->
@@ -133,24 +118,16 @@ class PostDetailsActivity : AppCompatActivity() {
     }
 
     private fun showPostDataOnUIElements() {
-
-        Log.d("PostDetailActivity", "showPostDataOnUIElements")
-
         tvTitle.text = post!!.title
         tvBody.text = post!!.body
-
         if (menuFavorite != null)
             showFavoriteIcon()
-
     }
 
     private fun showFavoriteIcon() {
 
-        Log.d("PostDetailActivity", "showFavoriteIcon ${post != null && post!!.isFavorite == 1}")
-
         if (post != null && post!!.isFavorite == 1) {
             menuFavorite!!.setIcon(R.drawable.ic_baseline_star_24)
-//            Log.d(TAG, "onCreateOptionsMenu: favoriteItemIcon is checked")
         } else {
             menuFavorite!!.setIcon(R.drawable.ic_baseline_star_border_24)
         }
@@ -172,15 +149,10 @@ class PostDetailsActivity : AppCompatActivity() {
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle item selection
         return when (item.itemId) {
             R.id.action_favorite -> {
 
-                if (post!!.isFavorite == 1) {
-                    post!!.isFavorite = 0
-                } else {
-                    post!!.isFavorite = 1
-                }
+                post!!.isFavorite = if (post!!.isFavorite == 1) 0 else 1
 
                 updatePostFavoriteStatus()
 
@@ -192,8 +164,6 @@ class PostDetailsActivity : AppCompatActivity() {
 
     private fun updatePostFavoriteStatus() {
         lifecycleScope.launch {
-
-            Log.d("PostDetailActivity", "updatePostFavoriteStatus")
             db.postDao().update(post!!)
             getPostData()
         }
