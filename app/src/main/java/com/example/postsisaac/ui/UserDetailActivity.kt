@@ -1,6 +1,8 @@
 package com.example.postsisaac.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -13,11 +15,14 @@ import com.example.postsisaac.models.User
 import com.example.postsisaac.utils.Constants
 import com.google.android.material.appbar.CollapsingToolbarLayout
 
+
 class UserDetailActivity : AppCompatActivity() {
 
     private var id: Int? = null
     private lateinit var toolbarLayout: CollapsingToolbarLayout
     private lateinit var binding: ActivityUserDetailBinding
+    private var lat: String = "0"
+    private var lng: String = "0"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +39,17 @@ class UserDetailActivity : AppCompatActivity() {
 
         getUserData()
 
+        binding.content.tvOpenOnGoogleMaps.setOnClickListener {
+            openUserLocationOnGoogleMaps()
+        }
+
+    }
+
+    private fun openUserLocationOnGoogleMaps() {
+        val uri: Uri =
+            Uri.parse("https://www.google.com/maps/search/?api=1&query=${lat},${lng}")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        startActivity(intent)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -61,6 +77,8 @@ class UserDetailActivity : AppCompatActivity() {
             { response ->
 
                 val user = User(response)
+                lat = user.address.geo.lat
+                lng = user.address.geo.lng
                 showUserDataOnUIElements(user)
 
             },
