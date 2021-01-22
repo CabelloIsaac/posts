@@ -60,11 +60,11 @@
             android:layout_marginTop="10dp"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/ic_baseline_favorite_24"
+            android:src="@drawable/ic_baseline_star_border_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvBody"
-            app:tint="@android:color/holo_red_dark" />
+            app:tint="@color/amber" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

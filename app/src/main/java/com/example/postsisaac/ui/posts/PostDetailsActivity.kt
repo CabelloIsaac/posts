@@ -174,10 +174,10 @@ class PostDetailsActivity : AppCompatActivity() {
         Log.d("PostDetailActivity", "showFavoriteIcon ${post != null && post!!.isFavorite == 1}")
 
         if (post != null && post!!.isFavorite == 1) {
-            menuFavorite!!.setIcon(R.drawable.ic_baseline_favorite_24)
+            menuFavorite!!.setIcon(R.drawable.ic_baseline_star_24)
 //            Log.d(TAG, "onCreateOptionsMenu: favoriteItemIcon is checked")
         } else {
-            menuFavorite!!.setIcon(R.drawable.ic_baseline_favorite_border_24)
+            menuFavorite!!.setIcon(R.drawable.ic_baseline_star_border_24)
         }
     }
 

@@ -86,9 +86,9 @@ class PostsAdapter(
             viewHolder.ivReaded.visibility = View.VISIBLE
 
         if (post.isFavorite == 1)
-            viewHolder.ivFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+            viewHolder.ivFavorite.setImageResource(R.drawable.ic_baseline_star_24)
         else
-            viewHolder.ivFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+            viewHolder.ivFavorite.setImageResource(R.drawable.ic_baseline_star_border_24)
 
 
         viewHolder.bind(post)
