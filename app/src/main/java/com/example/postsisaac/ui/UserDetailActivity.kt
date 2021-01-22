@@ -21,8 +21,7 @@ class UserDetailActivity : AppCompatActivity() {
     private var id: Int? = null
     private lateinit var toolbarLayout: CollapsingToolbarLayout
     private lateinit var binding: ActivityUserDetailBinding
-    private var lat: String = "0"
-    private var lng: String = "0"
+    private var user: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,13 +42,40 @@ class UserDetailActivity : AppCompatActivity() {
             openUserLocationOnGoogleMaps()
         }
 
+        binding.content.tvWebsite.setOnClickListener {
+            openUserWebsite()
+        }
+
+        binding.content.tvPhone.setOnClickListener {
+            openUserPhone()
+        }
     }
 
     private fun openUserLocationOnGoogleMaps() {
-        val uri: Uri =
-            Uri.parse("https://www.google.com/maps/search/?api=1&query=${lat},${lng}")
-        val intent = Intent(Intent.ACTION_VIEW, uri)
-        startActivity(intent)
+        if (user != null) {
+            val uri: Uri =
+                Uri.parse("https://www.google.com/maps/search/?api=1&query=${user!!.address.geo.lat},${user!!.address.geo.lng}")
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
+        }
+    }
+
+    private fun openUserWebsite() {
+        if (user != null) {
+            val uri: Uri =
+                Uri.parse("https://${user!!.website}")
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
+        }
+    }
+
+    private fun openUserPhone() {
+        if (user != null) {
+            val uri: Uri =
+                Uri.parse("tel:${user!!.phone}")
+            val intent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(intent)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -77,8 +103,7 @@ class UserDetailActivity : AppCompatActivity() {
             { response ->
 
                 val user = User(response)
-                lat = user.address.geo.lat
-                lng = user.address.geo.lng
+                this.user = user
                 showUserDataOnUIElements(user)
 
             },

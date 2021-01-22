@@ -61,7 +61,7 @@
                 app:layout_constraintEnd_toStartOf="@id/ivChevron"
                 app:layout_constraintStart_toEndOf="@id/ivPersonIcon"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Posted by" />
+                android:text="@string/posted_by" />
 
             <TextView
                 android:id="@+id/tvUserName"
