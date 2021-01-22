@@ -197,12 +197,11 @@ class PostsFragment : Fragment() {
             .setTitle(getString(R.string.remove_all))
             .setMessage(getString(R.string.remove_all_message))
             .setPositiveButton(
-                android.R.string.yes
+                android.R.string.ok
             ) { _, _ ->
                 deleteAllPosts()
             }
-            .setNegativeButton(android.R.string.no, null)
-            .setIcon(android.R.drawable.ic_dialog_alert)
+            .setNegativeButton(android.R.string.cancel, null)
             .show()
     }
 
