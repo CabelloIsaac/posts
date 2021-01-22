@@ -37,14 +37,15 @@ class PostsFragment : Fragment() {
     ): View? {
 
         val root = inflater.inflate(R.layout.fragment_posts, container, false)
+
+        recyclerView = root.findViewById(R.id.recycler_view)
+        swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout)
+
         postsAdapter =
             PostsAdapter(
                 posts,
                 { post -> adapterOnClick(post) },
                 { post -> adapterOnFavoriteClick(post) })
-
-        recyclerView = root.findViewById(R.id.recycler_view)
-        swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout)
 
         swipeRefreshLayout.setOnRefreshListener {
             fetchPostsFromApi()
@@ -52,8 +53,7 @@ class PostsFragment : Fragment() {
 
         recyclerView.adapter = postsAdapter
 
-        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView)
 
         initDB()
 
@@ -75,7 +75,8 @@ class PostsFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 lifecycleScope.launch {
                     db.postDao().delete(posts[viewHolder.adapterPosition])
-                    Snackbar.make(view!!, "Deleted", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(view!!, getString(R.string.post_deleted), Snackbar.LENGTH_SHORT)
+                        .show()
                     loadPostsFromDb()
                 }
             }
@@ -90,7 +91,7 @@ class PostsFragment : Fragment() {
         if (activity != null) {
             db = Room.databaseBuilder(
                 activity?.applicationContext!!,
-                PostsDb::class.java, "posts"
+                PostsDb::class.java, Constants.POSTS
             ).build()
         }
     }
@@ -99,9 +100,6 @@ class PostsFragment : Fragment() {
         lifecycleScope.launch {
             posts.clear()
             posts.addAll(db.postDao().getAll())
-
-            Log.d("PostsFragment", "There is ${posts.size} posts in Room")
-
             if (posts.isEmpty() && canFetchFromServer)
                 fetchPostsFromApi()
 
@@ -128,15 +126,13 @@ class PostsFragment : Fragment() {
         val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, url, null,
             { response ->
 
-
                 for (i in 0 until response.length()) {
                     val belongsToFirst20 = i < 20
                     val post = Post(response.getJSONObject(i), 0, !belongsToFirst20)
                     remotePosts.add(post)
                 }
-                addPostsToDb(remotePosts)
 
-                Log.d("PostsFragment", "There is ${remotePosts.size} posts in Server")
+                addPostsToDb(remotePosts)
 
             },
             { error ->
@@ -148,8 +144,6 @@ class PostsFragment : Fragment() {
         queue.add(jsonArrayRequest)
     }
 
-
-    /* Opens FlowerDetailActivity when RecyclerView item is clicked. */
     private fun adapterOnClick(post: Post) {
         val intent = Intent(context, PostDetailsActivity()::class.java)
         intent.putExtra(Constants.ID, post.id)
@@ -158,15 +152,8 @@ class PostsFragment : Fragment() {
         updatePostStatus(post)
     }
 
-    /* Opens FlowerDetailActivity when RecyclerView item is clicked. */
     private fun adapterOnFavoriteClick(post: Post) {
-        if (post.isFavorite == 1)
-            post.isFavorite = 0
-        else
-            post.isFavorite = 1
-
-        println("eqweqweqwe")
-
+        post.isFavorite = if (post.isFavorite == 1) 0 else 1
         updatePostStatus(post)
     }
 
@@ -179,11 +166,9 @@ class PostsFragment : Fragment() {
 
     private fun addPostsToDb(remotePosts: ArrayList<Post>) {
         lifecycleScope.launch {
-
             db.postDao().deleteAll()
             db.postDao().insert(remotePosts)
             loadPostsFromDb()
-
         }
     }
 

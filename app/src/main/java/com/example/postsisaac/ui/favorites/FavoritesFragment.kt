@@ -34,8 +34,6 @@ class FavoritesFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_favorites, container, false)
         val recyclerView: RecyclerView = root.findViewById(R.id.recycler_view)
 
-        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
-
         postsAdapter =
             PostsAdapter(
                 posts,
@@ -44,7 +42,7 @@ class FavoritesFragment : Fragment() {
 
         recyclerView.adapter = postsAdapter
 
-        itemTouchHelper.attachToRecyclerView(recyclerView)
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView)
 
         initDB()
 
