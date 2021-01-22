@@ -99,4 +99,6 @@
     <string name="company">Company</string>
     <string name="remove_all">Remove all</string>
     <string name="refresh_posts">Refresh posts</string>
+    <string name="all_posts_deleted">All posts deleted</string>
+    <string name="remove_all_message">Are you sure you want to delete all posts?</string>
 </resources>

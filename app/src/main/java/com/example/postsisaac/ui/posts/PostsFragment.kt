@@ -1,5 +1,6 @@
 package com.example.postsisaac.ui.posts
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -21,6 +22,7 @@ import com.example.postsisaac.utils.Constants
 import com.example.postsisaac.utils.PostsDb
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
+
 
 class PostsFragment : Fragment() {
 
@@ -190,17 +192,32 @@ class PostsFragment : Fragment() {
         }
     }
 
+    private fun showDeleteAllDialog() {
+        AlertDialog.Builder(context)
+            .setTitle(getString(R.string.remove_all))
+            .setMessage(getString(R.string.remove_all_message))
+            .setPositiveButton(
+                android.R.string.yes
+            ) { _, _ ->
+                deleteAllPosts()
+            }
+            .setNegativeButton(android.R.string.no, null)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show()
+    }
+
     private fun deleteAllPosts() {
         lifecycleScope.launch {
-
             db.postDao().deleteAll()
             loadPostsFromDb(canFetchFromServer = false)
-            Snackbar.make(recyclerView, "Deleted all", Snackbar.LENGTH_SHORT).show()
-
+            Snackbar.make(recyclerView, getString(R.string.all_posts_deleted), Snackbar.LENGTH_LONG)
+                .setAction(getString(R.string.refresh_posts)) {
+                    fetchPostsFromApi()
+                }
+                .show()
         }
     }
 
-    //enable options menu in this fragment
     override fun onCreate(savedInstanceState: Bundle?) {
         setHasOptionsMenu(true)
         super.onCreate(savedInstanceState)
@@ -208,20 +225,17 @@ class PostsFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_all_posts, menu);
-
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        //get item id to handle item clicks
         val id = item.itemId
-        //handle item clicks
-        if (id == R.id.action_refresh) {
+
+        if (id == R.id.action_refresh)
             fetchPostsFromApi()
-        }
-        if (id == R.id.action_remove_all) {
-            deleteAllPosts()
-        }
+
+        if (id == R.id.action_remove_all)
+            showDeleteAllDialog()
 
         return super.onOptionsItemSelected(item)
     }
