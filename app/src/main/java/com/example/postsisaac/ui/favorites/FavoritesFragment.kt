@@ -33,22 +33,26 @@ class FavoritesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        val root = inflater.inflate(R.layout.fragment_favorites, container, false)
+        val recyclerView: RecyclerView = root.findViewById(R.id.recycler_view)
+
         favoritesViewModel =
             ViewModelProvider(this).get(FavoritesViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_favorites, container, false)
+
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+
         postsAdapter =
             PostsAdapter(
                 posts,
                 { post -> adapterOnClick(post) },
                 { post -> adapterOnFavoriteClick(post) })
 
-        val recyclerView: RecyclerView = root.findViewById(R.id.recycler_view)
         recyclerView.adapter = postsAdapter
 
-        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
         initDB()
+
         return root
     }
 
@@ -65,29 +69,24 @@ class FavoritesFragment : Fragment() {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-
                 return false
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 lifecycleScope.launch {
                     db.postDao().delete(posts[viewHolder.adapterPosition])
-                    Snackbar.make(view!!, "Deleted", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(view!!, getString(R.string.post_deleted), Snackbar.LENGTH_SHORT)
+                        .show()
                     loadPostsFromDb()
                 }
             }
         }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        loadPostsFromDb()
-    }
-
     private fun initDB() {
         if (activity != null) {
             db = Room.databaseBuilder(
                 activity?.applicationContext!!,
-                PostsDb::class.java, "posts"
+                PostsDb::class.java, Constants.POSTS
             ).build()
         }
     }
@@ -96,13 +95,10 @@ class FavoritesFragment : Fragment() {
         lifecycleScope.launch {
             posts.clear()
             posts.addAll(db.postDao().getFavorites())
-
             postsAdapter.notifyDataSetChanged()
-
         }
     }
 
-    /* Opens FlowerDetailActivity when RecyclerView item is clicked. */
     private fun adapterOnClick(post: Post) {
         val intent = Intent(context, PostDetailsActivity()::class.java)
         intent.putExtra(Constants.ID, post.id)
@@ -111,12 +107,8 @@ class FavoritesFragment : Fragment() {
         updatePostStatus(post)
     }
 
-    /* Opens FlowerDetailActivity when RecyclerView item is clicked. */
     private fun adapterOnFavoriteClick(post: Post) {
-        if (post.isFavorite == 1)
-            post.isFavorite = 0
-        else
-            post.isFavorite = 1
+        post.isFavorite = if (post.isFavorite == 1) 0 else 1
         updatePostStatus(post)
     }
 

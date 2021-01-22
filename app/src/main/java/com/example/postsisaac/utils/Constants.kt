@@ -23,6 +23,7 @@ class Constants {
         const val BS = "bs"
         const val TITLE = "title"
         const val BODY = "body"
+        const val POSTS = "posts"
     }
 
 }

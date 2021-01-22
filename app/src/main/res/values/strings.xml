@@ -101,4 +101,5 @@
     <string name="refresh_posts">Refresh posts</string>
     <string name="all_posts_deleted">All posts deleted</string>
     <string name="remove_all_message">Are you sure you want to delete all posts?</string>
+    <string name="post_deleted">Post deleted</string>
 </resources>
