@@ -120,9 +120,6 @@ class FavoritesFragment : Fragment() {
             post.isFavorite = 0
         else
             post.isFavorite = 1
-
-        println("eqweqweqwe")
-
         updatePostStatus(post)
     }
 
@@ -130,17 +127,6 @@ class FavoritesFragment : Fragment() {
         lifecycleScope.launch {
             db.postDao().update(post)
             loadPostsFromDb()
-        }
-    }
-
-    private fun addPostsToDb(remotePosts: ArrayList<Post>) {
-        lifecycleScope.launch {
-//
-            // Limpiamos la base de datos
-            db.postDao().deleteAll()
-            db.postDao().insert(remotePosts)
-            loadPostsFromDb()
-
         }
     }
 }

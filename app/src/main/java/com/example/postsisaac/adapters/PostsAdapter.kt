@@ -31,12 +31,11 @@ class PostsAdapter(
         val tvBody: TextView = itemView.findViewById(R.id.tvBody)
         val ivReaded: ImageView = itemView.findViewById(R.id.ivReaded)
         val ivFavorite: ImageView = itemView.findViewById(R.id.ivFavorite)
-        val cardView: CardView = itemView.findViewById(R.id.cardView)
+        private val cardView: CardView = itemView.findViewById(R.id.cardView)
 
         private var currentPost: Post? = null
 
         init {
-            // Define click listener for the ViewHolder's View.
 
             cardView.setOnClickListener {
                 currentPost?.readed = true
@@ -45,10 +44,7 @@ class PostsAdapter(
                 }
             }
 
-            cardView.setOnDragListener { v, event -> true }
-
             ivFavorite.setOnClickListener {
-                currentPost?.readed = true
                 currentPost?.let {
                     onFavoriteClick(it)
                 }

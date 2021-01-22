@@ -1,6 +1,5 @@
 package com.example.postsisaac.daos
 
-import android.util.Log
 import androidx.room.*
 import com.example.postsisaac.models.Post
 
@@ -26,6 +25,6 @@ interface PostDao {
     suspend fun delete(post: Post)
 
     @Query("DELETE FROM Post")
-     suspend fun deleteAll()
+    suspend fun deleteAll()
 
 }
