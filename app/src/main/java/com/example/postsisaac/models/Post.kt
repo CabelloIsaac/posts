@@ -2,6 +2,7 @@ package com.example.postsisaac.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.postsisaac.utils.Constants
 import org.json.JSONObject
 
 @Entity
@@ -16,10 +17,10 @@ data class Post(
 ) {
 
     constructor (json: JSONObject, isFavorite: Int, readed: Boolean) : this(
-        json.getInt("id"),
-        json.getInt("userId"),
-        json.getString("title"),
-        json.getString("body"),
+        json.getInt(Constants.ID),
+        json.getInt(Constants.USER_ID),
+        json.getString(Constants.TITLE),
+        json.getString(Constants.BODY),
         isFavorite,
         readed
     )

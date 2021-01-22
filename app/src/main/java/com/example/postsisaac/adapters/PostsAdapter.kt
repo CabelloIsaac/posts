@@ -17,23 +17,20 @@ class PostsAdapter(
 ) :
     RecyclerView.Adapter<PostsAdapter.ViewHolder>() {
 
-    /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder).
-     */
     class ViewHolder(
         itemView: View,
         val onClick: (Post) -> Unit,
         val onFavoriteClick: (Post) -> Unit
     ) :
         RecyclerView.ViewHolder(itemView) {
+
+        private var currentPost: Post? = null
+
         val tvTitle: TextView = itemView.findViewById(R.id.tvTitle)
         val tvBody: TextView = itemView.findViewById(R.id.tvBody)
         val ivReaded: ImageView = itemView.findViewById(R.id.ivReaded)
         val ivFavorite: ImageView = itemView.findViewById(R.id.ivFavorite)
         private val cardView: CardView = itemView.findViewById(R.id.cardView)
-
-        private var currentPost: Post? = null
 
         init {
 
@@ -52,30 +49,25 @@ class PostsAdapter(
 
         }
 
-        /* Bind flower name and image. */
         fun bind(post: Post) {
             currentPost = post
         }
 
     }
 
-    // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.post_item, viewGroup, false)
         return ViewHolder(view, onClick, onFavoriteClick)
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
 
         val post = dataSet[position]
 
-        // Get element from your dataset at this position and replace the
-        // contents of the view with that element
         viewHolder.tvTitle.text = post.title
         viewHolder.tvBody.text = post.body
+
         if (post.readed)
             viewHolder.ivReaded.visibility = View.GONE
         else
@@ -86,12 +78,10 @@ class PostsAdapter(
         else
             viewHolder.ivFavorite.setImageResource(R.drawable.ic_baseline_star_border_24)
 
-
         viewHolder.bind(post)
 
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = dataSet.size
 
 }

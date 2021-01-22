@@ -4,6 +4,7 @@ class Constants {
 
     companion object {
         const val ID = "id"
+        const val USER_ID = "userId"
         const val NAME = "name"
         const val USERNAME = "username"
         const val EMAIL = "email"
@@ -20,6 +21,8 @@ class Constants {
         const val COMPANY = "company"
         const val CATCH_PHRASE = "catchPhrase"
         const val BS = "bs"
+        const val TITLE = "title"
+        const val BODY = "body"
     }
 
 }
