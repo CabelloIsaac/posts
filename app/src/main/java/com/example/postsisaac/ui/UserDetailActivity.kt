@@ -36,6 +36,11 @@ class UserDetailActivity : AppCompatActivity() {
 
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
+    }
+
     private fun getIntentExtras() {
         val bundle: Bundle? = intent.extras
         if (bundle != null) {

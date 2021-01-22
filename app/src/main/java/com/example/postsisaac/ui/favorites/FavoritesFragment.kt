@@ -49,9 +49,6 @@ class FavoritesFragment : Fragment() {
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
         initDB()
-
-        loadPostsFromDb()
-
         return root
     }
 

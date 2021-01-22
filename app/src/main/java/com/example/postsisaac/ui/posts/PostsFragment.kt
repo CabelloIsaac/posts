@@ -60,8 +60,6 @@ class PostsFragment : Fragment() {
 
         initDB()
 
-        loadPostsFromDb()
-
         return root
     }
 

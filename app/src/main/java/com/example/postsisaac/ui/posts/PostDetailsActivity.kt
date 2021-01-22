@@ -110,31 +110,6 @@ class PostDetailsActivity : AppCompatActivity() {
         }
     }
 
-//    private fun getPostData() {
-//        val queue = Volley.newRequestQueue(this)
-//        val url = "https://jsonplaceholder.typicode.com/posts/${id}"
-//
-//        // Request a string response from the provided URL.
-//        val jsonArrayRequest = JsonObjectRequest(
-//            Request.Method.GET, url, null,
-//            { response ->
-//
-//                val post = Post(response, true)
-//                showPostDataOnUIElements(post)
-//
-//                userId = post.userId
-//                getUserData(post.userId)
-//
-//            },
-//            { error ->
-//                Log.e("Error", error.toString())
-//            }
-//        )
-//
-//        // Add the request to the RequestQueue.
-//        queue.add(jsonArrayRequest)
-//    }
-
     private fun getUserData(userId: Int) {
         val queue = Volley.newRequestQueue(this)
         val url = "https://jsonplaceholder.typicode.com/users/${userId}"
