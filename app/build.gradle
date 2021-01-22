@@ -9,7 +9,7 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.example.postsisaac"
+        applicationId "com.cabelloisaac.posts"
         minSdkVersion 17
         targetSdkVersion 30
         versionCode 1
@@ -52,7 +52,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
 
     implementation 'androidx.room:room-ktx:2.2.6'
-    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     kapt 'androidx.room:room-compiler:2.2.6'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.2.0'
 

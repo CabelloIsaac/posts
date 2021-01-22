@@ -35,6 +35,6 @@
 
     <include
         android:id="@+id/content"
-        layout="@layout/content_scrolling" />
+        layout="@layout/user_detail_content_scrolling" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
