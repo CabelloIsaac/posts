@@ -2,26 +2,19 @@ package com.example.postsisaac.ui.favorites
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
-import com.android.volley.Request
-import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.Volley
 import com.example.postsisaac.R
 import com.example.postsisaac.adapters.PostsAdapter
 import com.example.postsisaac.models.Post
 import com.example.postsisaac.ui.posts.PostDetailsActivity
-import com.example.postsisaac.ui.posts.PostsViewModel
 import com.example.postsisaac.utils.Constants
 import com.example.postsisaac.utils.PostsDb
 import com.google.android.material.snackbar.Snackbar
@@ -60,6 +53,11 @@ class FavoritesFragment : Fragment() {
         loadPostsFromDb()
 
         return root
+    }
+
+    override fun onResume() {
+        loadPostsFromDb()
+        super.onResume()
     }
 
     private val itemTouchHelperCallback =

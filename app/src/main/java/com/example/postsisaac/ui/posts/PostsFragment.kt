@@ -3,9 +3,7 @@ package com.example.postsisaac.ui.posts
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -88,12 +86,10 @@ class PostsFragment : Fragment() {
             }
         }
 
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    override fun onResume() {
         loadPostsFromDb()
+        super.onResume()
     }
-
 
     private fun initDB() {
         if (activity != null) {
@@ -104,15 +100,16 @@ class PostsFragment : Fragment() {
         }
     }
 
-    private fun loadPostsFromDb() {
+    private fun loadPostsFromDb(canFetchFromServer: Boolean = true) {
         lifecycleScope.launch {
             posts.clear()
             posts.addAll(db.postDao().getAll())
 
             Log.d("PostsFragment", "There is ${posts.size} posts in Room")
 
-            if (posts.isEmpty())
+            if (posts.isEmpty() && canFetchFromServer)
                 fetchPostsFromApi()
+
             postsAdapter.notifyDataSetChanged()
 
             if (swipeRefreshLayout.isRefreshing)
@@ -188,13 +185,47 @@ class PostsFragment : Fragment() {
     private fun addPostsToDb(remotePosts: ArrayList<Post>) {
         lifecycleScope.launch {
 
-            Log.d("TAG", "Deleting posts")
             db.postDao().deleteAll()
-            Log.d("TAG", "Adding posts")
             db.postDao().insert(remotePosts)
             loadPostsFromDb()
 
         }
+    }
+
+    private fun deleteAllPosts() {
+        lifecycleScope.launch {
+
+            db.postDao().deleteAll()
+            loadPostsFromDb(canFetchFromServer = false)
+            Snackbar.make(recyclerView, "Deleted all", Snackbar.LENGTH_SHORT).show()
+
+        }
+    }
+
+    //enable options menu in this fragment
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_all_posts, menu);
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        //get item id to handle item clicks
+        val id = item.itemId
+        //handle item clicks
+        if (id == R.id.action_refresh) {
+            fetchPostsFromApi()
+        }
+        if (id == R.id.action_remove_all) {
+            deleteAllPosts()
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
 }
