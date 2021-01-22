@@ -97,4 +97,6 @@
     <string name="address">Address</string>
     <string name="open_on_google_maps">Open on Google Maps</string>
     <string name="company">Company</string>
+    <string name="remove_all">Remove all</string>
+    <string name="refresh_posts">Refresh posts</string>
 </resources>
