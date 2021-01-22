@@ -14,12 +14,12 @@
 
         <TextView
             android:id="@+id/tvTItle"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Title"
-            android:textAppearance="?attr/textAppearanceHeadline5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -28,13 +28,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
-        android:text="Descripción" />
+        tools:text="Descripción" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardViewUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:id="@+id/cardViewUser"
         app:cardCornerRadius="10dp"
         app:cardElevation="4dp">
 
@@ -58,10 +58,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:text="Posted by"
                 app:layout_constraintEnd_toStartOf="@id/ivChevron"
                 app:layout_constraintStart_toEndOf="@id/ivPersonIcon"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Posted by" />
 
             <TextView
                 android:id="@+id/tvUserName"
